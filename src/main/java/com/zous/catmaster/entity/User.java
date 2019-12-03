@@ -1,17 +1,15 @@
 package com.zous.catmaster.entity;
 
-import org.hibernate.annotations.Entity;
 import org.hibernate.annotations.Table;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(appliesTo = "user")
 public class User {
+    @Id
     private int id;
     private String userName;
     private String password;
