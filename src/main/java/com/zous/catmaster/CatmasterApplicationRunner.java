@@ -16,10 +16,8 @@ import java.util.Locale;
 
 @Component
 public class CatmasterApplicationRunner implements ApplicationRunner {
-    final
-    RoleMapper roleMapper;
-    final
-    ApplicationContext context;
+    private final RoleMapper roleMapper;
+    private final ApplicationContext context;
 
     public CatmasterApplicationRunner(RoleMapper roleMapper, ApplicationContext context) {
         this.roleMapper = roleMapper;

@@ -10,10 +10,15 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
+    maven{
+        url 'https://maven.aliyun.com/repository/jcenter'
+    }
+    jcenter()
     mavenCentral()
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.12'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'

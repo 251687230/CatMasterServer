@@ -22,6 +22,16 @@ public class User {
         name="role_type",referencedColumnName = "type"
     )})
     private Set<Role> roles = new HashSet<>();
+
+    public User(){}
+
+    public User(String userName, String password, String phoneNum, Set<Role> roles) {
+        this.userName = userName;
+        this.password = password;
+        this.phoneNum = phoneNum;
+        this.roles = roles;
+    }
+
     public int getId() {
         return id;
     }
