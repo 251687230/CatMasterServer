@@ -8,6 +8,8 @@ import javax.persistence.Id;
 @Entity
 @Table(appliesTo="role")
 public class Role {
+    public static int ROLE_MASTER = 1;
+
     @Id
     private int type;
     private String name;
@@ -28,4 +30,10 @@ public class Role {
         this.name = name;
     }
 
+    public Role(){}
+
+    public Role(int type, String name) {
+        this.type = type;
+        this.name = name;
+    }
 }
