@@ -2,8 +2,6 @@ package com.zous.catmaster;
 
 import com.zous.catmaster.entity.Role;
 import com.zous.catmaster.mapper.RoleMapper;
-import com.zous.catmaster.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
