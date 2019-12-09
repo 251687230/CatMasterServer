@@ -30,7 +30,7 @@ dependencies {
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.9.Final'
     implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.9.Final'
-
+    //implementation 'com.alibaba:fastjson:1.2.61'
 }
 
 test {

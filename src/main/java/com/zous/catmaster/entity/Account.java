@@ -11,6 +11,8 @@ public class Account {
     private int id;
     private String userName;
     private String password;
+    private boolean isActive;
+    private long expires;
 
     public Account(){}
 
@@ -43,4 +45,19 @@ public class Account {
         this.password = password;
     }
 
+    public long getExpires() {
+        return expires;
+    }
+
+    public void setExpires(long expires) {
+        this.expires = expires;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }
