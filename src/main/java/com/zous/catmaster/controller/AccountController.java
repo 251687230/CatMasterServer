@@ -30,7 +30,7 @@ public class AccountController {
     ApplicationContext context;
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public Result login(@RequestParam(value = "username") String userName, @RequestParam("password") String password) throws JsonProcessingException {
+    public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws JsonProcessingException {
         Optional<Account> optionalAccount = userService.getAccount(userName);
         Result result;
         if (optionalAccount.isPresent()) {
@@ -66,7 +66,7 @@ public class AccountController {
 
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public String register(@RequestParam(value = "username") String userName, @RequestParam("password") String password){
+    public String register(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password){
         int code = userService.saveAccount(userName,password);
         if(code >= 0){
             return "SUCCESS";
