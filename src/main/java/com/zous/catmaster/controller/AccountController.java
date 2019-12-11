@@ -2,6 +2,7 @@ package com.zous.catmaster.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zous.catmaster.annotation.Frequency;
 import com.zous.catmaster.bean.ErrorCode;
 import com.zous.catmaster.bean.Result;
 import com.zous.catmaster.entity.Account;
@@ -30,6 +31,7 @@ public class AccountController {
     ApplicationContext context;
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @Frequency(name = "login",limit = 1,time = 1)
     public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws JsonProcessingException {
         Optional<Account> optionalAccount = userService.getAccount(userName);
         Result result;
