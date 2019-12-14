@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zous.catmaster.annotation.Frequency;
 import com.zous.catmaster.bean.ErrorCode;
 import com.zous.catmaster.bean.Result;
+import com.zous.catmaster.bean.Token;
 import com.zous.catmaster.entity.Account;
 import com.zous.catmaster.service.UserService;
 import com.zous.catmaster.utils.DateUtils;
+import com.zous.catmaster.utils.TokenUtils;
 import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/account")
@@ -44,7 +43,9 @@ public class AccountController {
                         result = new Result(ErrorCode.SUCCESS);
                         ObjectMapper objectMapper = new ObjectMapper();
                         Map<String,String> map = new HashMap<>();
-                        map.put("sessionToken","123456");
+                        TokenUtils tokenUtils = TokenUtils.defaultUtil();
+                        String token = tokenUtils.create(UUID.randomUUID().toString(),"default",String.valueOf(account.getId())).getTokenStr();
+                        map.put("sessionToken",token);
                         result.setData(objectMapper.writeValueAsString(map));
                     } else {
                         result = new Result(ErrorCode.FAIL_EXPIRE_INVALID);
@@ -69,7 +70,7 @@ public class AccountController {
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public String register(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password){
-        int code = userService.saveAccount(userName,password);
+        int code = userService.saveAccount(userName,MD5Encoder.encode(password.getBytes()));
         if(code >= 0){
             return "SUCCESS";
         }else {

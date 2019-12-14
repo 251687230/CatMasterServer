@@ -8,4 +8,5 @@ public class ErrorCode {
     public static int FAIL_NOT_ACTIVITE = -1002;
     public static int FAIL_EXPIRE_INVALID = -1003;
     public static int FAIL_PASSWORD_ERROR = -1004;
+    public static int FAIL_TOKEN_TIMEOUT = -1005;
 }

@@ -35,6 +35,10 @@ public class TokenUtils {
      */
     private String headType = "JWT";
     /**
+     * Secret
+     */
+    private String secret = "zous.catmaster@2019";
+    /**
      * 加密方式
      */
     private String headALG = "HS256";
@@ -96,14 +100,12 @@ public class TokenUtils {
     }
     /**
      * 创建token
-     *
-     * @param secret    密匙
      * @param tokenId   当前tokenid token的唯一标识
      * @param userType token持有者类型，可分辨是哪类用户访问
      * @param userInfo  用户信息；
      * @return
      */
-    public Token create(String secret, String tokenId, String userType, String userInfo) {
+    public Token create( String tokenId, String userType, String userInfo) {
         Token token = new Token();
         // 创建头
         Token.Head head = new Token.Head();
@@ -143,10 +145,9 @@ public class TokenUtils {
     /**
      * 解析token字符串为token对象 ，如果token字符串信息错误，则返回null
      * @param token 签发的token字符串信息
-     * @param secret token加密字符串
      * @return
      */
-    public Token parse(String token, String secret) {
+    public Token parse(String token) {
         String[] tokens = null;
         // 检查参数错误和token非法；
         if (token == null || secret == null || (tokens = token.split("\\.")) == null || tokens.length != 3) {
@@ -177,30 +178,27 @@ public class TokenUtils {
      * 解析并更新token
      * token非法或token已失效，则返回null
      * @param token token字符串
-     * @param secret 加密数据
      * @return
      */
-    public Token parseAndRefresh(String token, String secret) {
-        Token t = parse(token, secret);
+    public Token parseAndRefresh(String token) {
+        Token t = parse(token);
         return t == null || isInvalid(t) ? null : refresh(t);
     }
     /**
      * 检查token字符串是否非法
      * @param token
-     * @param secret
      * @return true 非法token， false 正确token；
      */
-    public boolean isIllegality(String token, String secret) {
-        return parse(token, secret) == null;
+    public boolean isIllegality(String token) {
+        return parse(token) == null;
     }
     /**
      * 检查token是否过期
      * @param token
-     * @param secret
      * @return true 过期 ，false反之
      */
-    public boolean isTimeout(String token, String secret) {
-        return isTimeout(parse(token, secret));
+    public boolean isTimeout(String token) {
+        return isTimeout(parse(token));
     }
     /**
      * 检查token是否过期
@@ -214,11 +212,10 @@ public class TokenUtils {
     /**
      * 检查token是否无效
      * @param token
-     * @param secret
      * @return true 无效 ，false 反之
      */
     public boolean isInvalid(String token ,String secret) {
-        return isInvalid(parse(token, secret));
+        return isInvalid(parse(token));
     }
     /**
      * 检查token是否无效
