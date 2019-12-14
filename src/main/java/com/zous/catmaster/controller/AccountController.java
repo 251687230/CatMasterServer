@@ -9,6 +9,7 @@ import com.zous.catmaster.bean.Token;
 import com.zous.catmaster.entity.Account;
 import com.zous.catmaster.service.UserService;
 import com.zous.catmaster.utils.DateUtils;
+import com.zous.catmaster.utils.SecurityUtils;
 import com.zous.catmaster.utils.TokenUtils;
 import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @RestController
@@ -31,12 +33,12 @@ public class AccountController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @Frequency(name = "login",limit = 1,time = 1)
-    public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws JsonProcessingException {
+    public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws JsonProcessingException, NoSuchAlgorithmException {
         Optional<Account> optionalAccount = userService.getAccount(userName);
         Result result;
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
-            if (MD5Encoder.encode(password.getBytes()).equals(account.getPassword())) {
+            if (SecurityUtils.md5(password).equals(account.getPassword())) {
                 if (account.isActive()) {
                     if (account.getExpires() >= Calendar.getInstance().getTimeInMillis()) {
                         //SUCCESS,return sessionToken
@@ -69,12 +71,14 @@ public class AccountController {
 
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public String register(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password){
-        int code = userService.saveAccount(userName,MD5Encoder.encode(password.getBytes()));
+    public Result register(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws NoSuchAlgorithmException {
+        int code = userService.saveAccount(userName, SecurityUtils.md5(password));
         if(code >= 0){
-            return "SUCCESS";
+            return new Result(ErrorCode.SUCCESS);
         }else {
-            return "FAIL";
+            Result result =  new Result(ErrorCode.FAIL_ACCOUNT_EXIT);
+            result.setDescription(context.getMessage("fail_account_exist",null,LocaleContextHolder.getLocale()));
+            return result;
         }
     }
 }
