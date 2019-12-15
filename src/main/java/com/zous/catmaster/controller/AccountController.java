@@ -107,8 +107,10 @@ public class AccountController {
         return result;
     }
 
-    @RequestMapping(value = "profile", method = RequestMethod.GET)
-    public void profile(@RequestParam("UserId") long userId) {
+    @RequestMapping(value = "changePassword", method = RequestMethod.POST)
+    @Frequency(name = "changePassword",limit = 1,time = 1)
+    public void changePassword(@RequestParam("UserName") String userName,@RequestParam("Captcha")
+                               String captcha,@RequestParam("newPassword")String password) {
 
     }
 }
