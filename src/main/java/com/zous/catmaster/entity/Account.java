@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String userName;
     private String password;
     private boolean isActive;
@@ -16,16 +16,23 @@ public class Account {
 
     public Account(){}
 
+    public Account(String userName, String password, boolean isActive, long expires) {
+        this.userName = userName;
+        this.password = password;
+        this.isActive = isActive;
+        this.expires = expires;
+    }
+
     public Account(String userName, String password) {
         this.userName = userName;
         this.password = password;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

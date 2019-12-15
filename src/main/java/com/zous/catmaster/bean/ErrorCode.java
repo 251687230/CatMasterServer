@@ -5,7 +5,7 @@ public class ErrorCode {
 
     //Account_LOGIN
     public static int FAIL_ACCOUNT_NOT_EXIST = -1001;
-    public static int FAIL_NOT_ACTIVITE = -1002;
+    public static int FAIL_NOT_ACTIVITY = -1002;
     public static int FAIL_EXPIRE_INVALID = -1003;
     public static int FAIL_PASSWORD_ERROR = -1004;
     public static int FAIL_TOKEN_TIMEOUT = -1005;

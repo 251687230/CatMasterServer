@@ -4,6 +4,7 @@ import com.zous.catmaster.annotation.Frequency;
 import com.zous.catmaster.bean.FrequencyBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * 对请求进行限制，过滤是否过量请求，是否需要登录
+ * 对请求进行限制，过滤是否过量请求
  */
 public class FrequencyInterceptor implements HandlerInterceptor {
     private static final int MAX_BASE_STATION_SIZE = 100000;

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class AccountService {
     @Autowired
     AccountMapper accountMapper;
 
@@ -17,8 +17,11 @@ public class UserService {
         return  Optional.ofNullable(accountMapper.findByUserName(userName));
     }
 
-    public int saveAccount(String userName,String password){
-        Account account = new Account(userName,password);
+    public Optional<Account> getAccount(long userId){
+        return Optional.ofNullable(accountMapper.findById(userId));
+    }
+
+    public int save(Account account){
         try {
             accountMapper.save(account);
         }catch (Exception e){
@@ -26,5 +29,10 @@ public class UserService {
             return -1;
         }
         return 0;
+    }
+
+    public int saveAccount(String userName,String password){
+        Account account = new Account(userName,password);
+        return save(account);
     }
 }
