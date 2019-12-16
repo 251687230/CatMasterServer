@@ -31,6 +31,10 @@ public class AccountService {
         return 0;
     }
 
+    public void updateAccount(long userId,String password){
+        accountMapper.updatePasswordById(userId, password);
+    }
+
     public int saveAccount(String userName,String password){
         Account account = new Account(userName,password);
         return save(account);

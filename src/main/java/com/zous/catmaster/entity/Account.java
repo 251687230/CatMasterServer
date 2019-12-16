@@ -9,6 +9,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user_name",targetEntity = Captcha.class)
     private String userName;
     private String password;
     private boolean isActive;

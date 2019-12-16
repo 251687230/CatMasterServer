@@ -13,4 +13,5 @@ public class ErrorCode {
 
     //Captcha
     public static int FAIL_INVALID_PHONENUM = -1101;
+    public static int FAIL_CAPTCHA_ERROR = -1102;
 }

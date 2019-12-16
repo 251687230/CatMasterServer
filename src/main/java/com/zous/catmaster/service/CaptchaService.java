@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 @Service
 public class CaptchaService {
@@ -14,5 +15,9 @@ public class CaptchaService {
 
     public void saveCaptcha(String phoneNum,String code){
         captchaMapper.save(new Captcha(phoneNum,code, Calendar.getInstance().getTimeInMillis()));
+    }
+
+    public Optional<Captcha> getCaptcha(long userId){
+        return captchaMapper.findByUserId(userId);
     }
 }

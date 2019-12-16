@@ -1,11 +1,12 @@
 package com.zous.catmaster.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Captcha {
     @Id
+    @OneToOne(targetEntity = Account.class)
+    @JoinColumn(name="userName",referencedColumnName="user_name")
     private String userName;
     private String captcha;
     private long createTime;

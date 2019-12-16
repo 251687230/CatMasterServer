@@ -8,7 +8,9 @@ import com.zous.catmaster.bean.ErrorCode;
 import com.zous.catmaster.bean.Result;
 import com.zous.catmaster.bean.Token;
 import com.zous.catmaster.entity.Account;
+import com.zous.catmaster.entity.Captcha;
 import com.zous.catmaster.service.AccountService;
+import com.zous.catmaster.service.CaptchaService;
 import com.zous.catmaster.utils.DateUtils;
 import com.zous.catmaster.utils.SecurityUtils;
 import com.zous.catmaster.utils.TokenUtils;
@@ -26,6 +28,8 @@ import java.util.*;
 public class AccountController {
     @Autowired
     AccountService accountService;
+    @Autowired
+    CaptchaService captchaService;
     @Autowired
     ApplicationContext context;
     @Value("${spring.profiles.active}")
@@ -109,8 +113,18 @@ public class AccountController {
 
     @RequestMapping(value = "changePassword", method = RequestMethod.POST)
     @Frequency(name = "changePassword",limit = 1,time = 1)
-    public void changePassword(@RequestParam("UserName") String userName,@RequestParam("Captcha")
+    public Result changePassword(@RequestParam("UserId") long userId,@RequestParam("Captcha")
                                String captcha,@RequestParam("newPassword")String password) {
-
+        Optional<Captcha> captchaOptional = captchaService.getCaptcha(userId);
+        if(captchaOptional.isPresent()){
+            Captcha findCaptcha = captchaOptional.get();
+            if(captcha.equals(findCaptcha.getCaptcha())){
+                accountService.updateAccount(userId, password);
+                return new Result(ErrorCode.SUCCESS);
+            }
+        }
+        Result result = new Result(ErrorCode.FAIL_CAPTCHA_ERROR);
+        result.setDescription(context.getMessage("fail_captcha_error",null,LocaleContextHolder.getLocale()));
+        return result;
     }
 }
