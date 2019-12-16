@@ -51,8 +51,8 @@ public class CaptchaContoller {
                 return result;
             }
         }
-
     }
+
 
     private boolean isAvailable(String phoneNum) {
         String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";

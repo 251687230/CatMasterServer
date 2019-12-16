@@ -6,5 +6,4 @@ import org.springframework.data.repository.CrudRepository;
 public interface AccountMapper extends CrudRepository<Account,String> {
     Account findByUserName(String userName);
     Account findById(long id);
-    int updatePasswordById(long userId,String password);
 }

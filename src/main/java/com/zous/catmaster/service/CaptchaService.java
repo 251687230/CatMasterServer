@@ -17,7 +17,11 @@ public class CaptchaService {
         captchaMapper.save(new Captcha(phoneNum,code, Calendar.getInstance().getTimeInMillis()));
     }
 
-    public Optional<Captcha> getCaptcha(long userId){
-        return captchaMapper.findByUserId(userId);
+    public Optional<Captcha> validate(String phoneNum,String captcha){
+        return Optional.ofNullable(captchaMapper.findByUserNameAndCaptcha(phoneNum,captcha));
+    }
+
+    public void delete(Captcha captcha){
+        captchaMapper.delete(captcha);
     }
 }

@@ -113,18 +113,34 @@ public class AccountController {
 
     @RequestMapping(value = "changePassword", method = RequestMethod.POST)
     @Frequency(name = "changePassword",limit = 1,time = 1)
-    public Result changePassword(@RequestParam("UserId") long userId,@RequestParam("Captcha")
-                               String captcha,@RequestParam("newPassword")String password) {
-        Optional<Captcha> captchaOptional = captchaService.getCaptcha(userId);
-        if(captchaOptional.isPresent()){
-            Captcha findCaptcha = captchaOptional.get();
-            if(captcha.equals(findCaptcha.getCaptcha())){
-                accountService.updateAccount(userId, password);
-                return new Result(ErrorCode.SUCCESS);
+    public Result changePassword(@RequestParam("UserName") String userName,@RequestParam("Captcha")
+                               String captcha,@RequestParam("newPassword")String password) throws NoSuchAlgorithmException {
+        Optional<Account> accountOptional = accountService.getAccount(userName);
+        if(accountOptional.isPresent()){
+            Account account = accountOptional.get();
+            Optional<Captcha> captchaOptional = captchaService.validate(userName,captcha);
+            if(captchaOptional.isPresent()){
+                Captcha captcha1 = captchaOptional.get();
+                if(Calendar.getInstance().getTimeInMillis() - captcha1.getCreateTime() < 5 * 60 * 1000){
+                    account.setPassword(password);
+                    captchaService.delete(captcha1);
+                    return new Result(ErrorCode.SUCCESS);
+                }else {
+                    Result result = new Result(ErrorCode.FAIL_CAPTCHA_TIMEOUT);
+                    result.setDescription(context.getMessage("fail_captcha_timeout",null,LocaleContextHolder.getLocale()));
+                    return result;
+                }
+            }else {
+                Result result = new Result(ErrorCode.FAIL_CAPTCHA_ERROR);
+                result.setDescription(context.getMessage("fail_captcha_error",null,LocaleContextHolder.getLocale()));
+                return result;
             }
+        }else {
+            Result result = new Result(ErrorCode.FAIL_ACCOUNT_NOT_EXIST);
+            result.setDescription(context.getMessage("fail_account_not_exist",null,LocaleContextHolder.getLocale()));
+            return result;
         }
-        Result result = new Result(ErrorCode.FAIL_CAPTCHA_ERROR);
-        result.setDescription(context.getMessage("fail_captcha_error",null,LocaleContextHolder.getLocale()));
-        return result;
+
+
     }
 }
