@@ -2,6 +2,8 @@ package com.zous.catmaster.entity;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "userName")})
@@ -11,22 +13,16 @@ public class Account {
     private long id;
     private String userName;
     private String password;
-    private boolean isActive;
-    private long expires;
+    private String userId;
+    private List<Role> roles = new ArrayList<>();
 
     public Account(){}
-
-    public Account(String userName, String password, boolean isActive, long expires) {
-        this.userName = userName;
-        this.password = password;
-        this.isActive = isActive;
-        this.expires = expires;
-    }
 
     public Account(String userName, String password) {
         this.userName = userName;
         this.password = password;
     }
+
 
     public long getId() {
         return id;
@@ -52,19 +48,4 @@ public class Account {
         this.password = password;
     }
 
-    public long getExpires() {
-        return expires;
-    }
-
-    public void setExpires(long expires) {
-        this.expires = expires;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 }
