@@ -16,6 +16,9 @@ public class Card {
     private long expireTime;
     private int totalTimes;
     private boolean isExperienceCard;
+    @ManyToMany(targetEntity = Course.class)
+    @JoinTable(name = "card_course",joinColumns = @JoinColumn(name = "card_id",referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "course_id",referencedColumnName = "id"))
     private Set<Course> applyCources = new HashSet<>();
 
     public long getId() {

@@ -12,9 +12,10 @@ import java.util.Set;
 public class Manager extends User{
 
     private long expireTime = -1;
-    @OneToMany(targetEntity=Teacher.class
-    )
-    private Set<Teacher> teachers = new HashSet<Teacher>();
+    @OneToMany(targetEntity=Teacher.class)
+    private Set<Teacher> teachers = new HashSet<>();
+    @OneToMany(targetEntity = Store.class)
+    private Set<Store> stores = new HashSet<>();
 
     public long getExpireTime() {
         return expireTime;
@@ -30,5 +31,13 @@ public class Manager extends User{
 
     public void setTeachers(Set<Teacher> teachers) {
         this.teachers = teachers;
+    }
+
+    public Set<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(Set<Store> stores) {
+        this.stores = stores;
     }
 }
