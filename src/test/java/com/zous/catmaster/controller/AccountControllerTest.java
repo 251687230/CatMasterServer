@@ -7,6 +7,9 @@ import com.zous.catmaster.bean.ErrorCode;
 import com.zous.catmaster.bean.Result;
 import com.zous.catmaster.entity.Account;
 import com.zous.catmaster.mapper.AccountMapper;
+import com.zous.catmaster.mapper.ManagerMapper;
+import com.zous.catmaster.service.AccountService;
+import com.zous.catmaster.service.ManagerService;
 import com.zous.catmaster.utils.SecurityUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,13 +32,14 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.UUID;
 
 
 public class AccountControllerTest extends BaseControllerTest {
 
     @Autowired
-    private AccountMapper accountMapper;
+    private AccountService accountService;
 
     private final String USER_NAME = "lujie";
     private final String PASSWORD = "123456";
@@ -59,11 +63,11 @@ public class AccountControllerTest extends BaseControllerTest {
         Assert.assertEquals(result1.getErrorCode(), ErrorCode.SUCCESS);
     }
 
+
     @Test
     public void testLogin() throws Exception {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR,1);
-        accountMapper.save(new Account(USER_NAME,SecurityUtils.md5(PASSWORD),true,calendar.getTimeInMillis()));
+        accountService.createManagerAccount(USER_NAME,SecurityUtils.md5(PASSWORD));
+        accountService.activeManagerAccount(USER_NAME,7 * 24 * 3600);
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/account/login");
         builder.param("UserName",USER_NAME);

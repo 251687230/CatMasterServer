@@ -1,9 +1,11 @@
 package com.zous.catmaster.entity;
 
 
+import org.hibernate.annotations.ListIndexBase;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "userName")})
@@ -14,7 +16,8 @@ public class Account {
     private String userName;
     private String password;
     private String userId;
-    private List<Role> roles = new ArrayList<>();
+    @ElementCollection(targetClass=String.class)
+    private Set<String> roleTypes = new HashSet<>();
 
     public Account(){}
 
@@ -48,4 +51,19 @@ public class Account {
         this.password = password;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Set<String> getRoleTypes() {
+        return roleTypes;
+    }
+
+    public void setRoleTypes(Set<String> roleTypes) {
+        this.roleTypes = roleTypes;
+    }
 }

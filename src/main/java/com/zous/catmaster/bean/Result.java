@@ -5,6 +5,8 @@ public class Result {
     private String description = "";
     private String data;
 
+    public Result(){}
+
     public Result(int errorCode){
         this.errorCode = errorCode;
     }

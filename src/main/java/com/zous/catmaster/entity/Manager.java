@@ -1,24 +1,20 @@
 package com.zous.catmaster.entity;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-public class Manager {
-    private long id;
-    private String nickName;
-    private String headPhoto;
-    private long birthday;
-    private int sex;
-    private String phoneNum;
+public class Manager extends User{
+
     private long expireTime = -1;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    @OneToMany(targetEntity=Teacher.class,mappedBy="manager")
+    @Cascade(CascadeType.SAVE_UPDATE) //级联
+    private Set<Teacher> teachers = new HashSet<Teacher>();
 
     public long getExpireTime() {
         return expireTime;
@@ -26,5 +22,13 @@ public class Manager {
 
     public void setExpireTime(long expireTime) {
         this.expireTime = expireTime;
+    }
+
+    public Set<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<Teacher> teachers) {
+        this.teachers = teachers;
     }
 }

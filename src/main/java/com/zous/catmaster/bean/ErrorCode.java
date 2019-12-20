@@ -10,6 +10,7 @@ public class ErrorCode {
     public static int FAIL_PASSWORD_ERROR = -1004;
     public static int FAIL_TOKEN_TIMEOUT = -1005;
     public static int FAIL_ACCOUNT_EXIT = -1006;
+    public static int FAIL_MANAGER_FORBID = -1007;
 
     //Captcha
     public static int FAIL_INVALID_PHONENUM = -1101;

@@ -9,4 +9,5 @@ import java.lang.annotation.*;
 @Documented
 @Order(2)
 public @interface CheckLogin {
+    boolean userToken() default true;
 }
