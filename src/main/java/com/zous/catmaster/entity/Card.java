@@ -16,6 +16,7 @@ public class Card {
     private long expireTime;
     private int totalTimes;
     private boolean isExperienceCard;
+    private Set<Course> applyCources = new HashSet<>();
 
     public long getId() {
         return id;
@@ -72,5 +73,13 @@ public class Card {
 
     public void setTotalTimes(int totalTimes) {
         this.totalTimes = totalTimes;
+    }
+
+    public Set<Course> getApplyCources() {
+        return applyCources;
+    }
+
+    public void setApplyCources(Set<Course> applyCources) {
+        this.applyCources = applyCources;
     }
 }

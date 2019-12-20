@@ -2,10 +2,7 @@ package com.zous.catmaster.entity;
 
 import com.zous.catmaster.bean.AppConstant;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +15,6 @@ public class User {
     private long birthday;
     private int sex = AppConstant.SEX_WOMEN;
     private String phoneNum;
-    @ManyToMany(cascade = CascadeType.MERGE)
-    private Set<Store> stores = new HashSet<>();
 
     public String getId() {
         return id;

@@ -12,8 +12,8 @@ import java.util.Set;
 public class Manager extends User{
 
     private long expireTime = -1;
-    @OneToMany(targetEntity=Teacher.class,mappedBy="manager")
-    @Cascade(CascadeType.SAVE_UPDATE) //级联
+    @OneToMany(targetEntity=Teacher.class
+    )
     private Set<Teacher> teachers = new HashSet<Teacher>();
 
     public long getExpireTime() {

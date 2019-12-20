@@ -2,7 +2,9 @@ package com.zous.catmaster.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Course {
@@ -19,6 +21,9 @@ public class Course {
     @ElementCollection(targetClass=String.class)
     private List<String> imageUrls = new ArrayList<>();
     private String description;
+    @ManyToOne(targetEntity = Store.class)
+    @JoinColumn(name = "store_id")
+    private Store belongStore;
 
     public long getId() {
         return id;
@@ -90,5 +95,13 @@ public class Course {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Store getBelongStore() {
+        return belongStore;
+    }
+
+    public void setBelongStore(Store belongStore) {
+        this.belongStore = belongStore;
     }
 }
