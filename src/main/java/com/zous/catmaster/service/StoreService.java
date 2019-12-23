@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StoreService {
@@ -14,5 +15,13 @@ public class StoreService {
 
     public List<Store> getStores(String userId){
         return storeMapper.findAllByManagerId(userId);
+    }
+
+    public void saveStore(Store store) throws Exception{
+        storeMapper.save(store);
+    }
+
+    public Optional<Store> getStore(String userId,long storeId){
+        return storeMapper.findByManagerIdAndId(userId, storeId);
     }
 }

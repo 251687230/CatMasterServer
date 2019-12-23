@@ -2,6 +2,7 @@ package com.zous.catmaster.bean;
 
 public class ErrorCode {
     public static int SUCCESS = 0;
+    public static int FAIL_PARAMS_ERROR = -1;
 
     //Account
     public static int FAIL_ACCOUNT_NOT_EXIST = -1001;
@@ -17,4 +18,7 @@ public class ErrorCode {
     public static int FAIL_INVALID_PHONENUM = -1101;
     public static int FAIL_CAPTCHA_ERROR = -1102;
     public static int FAIL_CAPTCHA_TIMEOUT = -1103;
+
+    //Store
+    public static int FAIL_STORE_NOT_EXIST = -1201;
 }
