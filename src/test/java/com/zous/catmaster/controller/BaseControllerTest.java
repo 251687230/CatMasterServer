@@ -1,6 +1,7 @@
 package com.zous.catmaster.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.zous.catmaster.CatmasterApplication;
 import com.zous.catmaster.utils.SecurityUtils;
 import org.junit.Before;
@@ -23,6 +24,9 @@ import java.util.UUID;
 public class BaseControllerTest extends AbstractTransactionalJUnit4SpringContextTests {
     protected MockMvc mvc;
     protected static String VERIFE_KEY = "zous.catmaster@2019";
+    protected final String USER_NAME = "lujie";
+    protected final String PASSWORD = "123456";
+    Gson gson = new Gson();
 
     @Autowired
     protected WebApplicationContext context;

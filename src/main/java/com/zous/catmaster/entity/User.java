@@ -15,6 +15,7 @@ public class User {
     private long birthday;
     private int sex = AppConstant.SEX_WOMEN;
     private String phoneNum;
+    private long createTime;
 
     public String getId() {
         return id;
@@ -62,5 +63,13 @@ public class User {
 
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 }

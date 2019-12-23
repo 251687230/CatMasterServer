@@ -25,13 +25,17 @@ public class AccountService {
     @Autowired
     ManagerMapper managerMapper;
 
-    public Optional<Account> getAccount(String userName){
-        return  accountMapper.findByUserName(userName);
+    public Optional<Account> getAccountByUserId(String userId){
+        return  accountMapper.findByUserId(userId);
     }
 
 
     public Optional<Account> getAccount(long userId){
         return accountMapper.findById(userId);
+    }
+
+    public Optional<Account> getAccountByUserName(String userName){
+        return accountMapper.findByUserName(userName);
     }
 
 

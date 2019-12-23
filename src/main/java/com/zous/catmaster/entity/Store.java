@@ -18,6 +18,8 @@ public class Store {
     private String introduce;
     @ElementCollection
     private List<String> imageUrls = new ArrayList<>();
+    @ManyToOne
+    Manager manager;
 
     public long getId() {
         return id;
@@ -89,5 +91,13 @@ public class Store {
 
     public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
+    }
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 }

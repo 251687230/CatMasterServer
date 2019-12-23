@@ -41,10 +41,6 @@ public class AccountControllerTest extends BaseControllerTest {
     @Autowired
     private AccountService accountService;
 
-    private final String USER_NAME = "lujie";
-    private final String PASSWORD = "123456";
-
-
 
     @Test
     public void testRegister() throws Exception {
@@ -57,7 +53,6 @@ public class AccountControllerTest extends BaseControllerTest {
                 .andReturn();
         String result = mvcResult.getResponse().getContentAsString();
         System.out.println("接口返回结果：" + result);
-        Gson gson = new Gson();
         Result result1 = gson.fromJson(result, Result.class);
         // 判断接口返回json中success字段是否为true
         Assert.assertEquals(result1.getErrorCode(), ErrorCode.SUCCESS);
@@ -78,7 +73,6 @@ public class AccountControllerTest extends BaseControllerTest {
                 .andReturn();
         String result = mvcResult.getResponse().getContentAsString();
         System.out.println("接口返回结果：" + result);
-        Gson gson = new Gson();
         Result result1 = gson.fromJson(result, Result.class);
         // 判断接口返回json中success字段是否为true
         Assert.assertEquals(result1.getErrorCode(), ErrorCode.SUCCESS);

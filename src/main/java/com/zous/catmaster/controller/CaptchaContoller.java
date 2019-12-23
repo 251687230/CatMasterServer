@@ -38,7 +38,7 @@ public class CaptchaContoller {
             return result;
         } else {
             //TODO 待接入短信验证接口
-            Optional<Account> account = mAccountService.getAccount(phoneNum);
+            Optional<Account> account = mAccountService.getAccountByUserName(phoneNum);
             if(account.isPresent()) {
                 Random random = new Random();
                 int captcha = random.nextInt(8999) + 1000;
