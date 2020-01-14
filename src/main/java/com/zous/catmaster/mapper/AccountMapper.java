@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface AccountMapper extends CrudRepository<Account,Long> {
     Optional<Account> findByUserName(String userName);
+    Optional<Account> findByUserId(String userId);
 }

@@ -39,7 +39,7 @@ public class AccountController {
     @Frequency(name = "login", limit = 1, time = 1)
     @CheckLogin(userToken = false)
     public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws JsonProcessingException, NoSuchAlgorithmException {
-        Optional<Account> optionalAccount = accountService.getAccount(userName);
+        Optional<Account> optionalAccount = accountService.getAccountByUserName(userName);
         Result result;
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
@@ -49,7 +49,7 @@ public class AccountController {
                 ObjectMapper objectMapper = new ObjectMapper();
                 Map<String, String> map = new HashMap<>();
                 TokenUtils tokenUtils = TokenUtils.defaultUtil();
-                String token = tokenUtils.create(UUID.randomUUID().toString(), "default", String.valueOf(account.getId())).getTokenStr();
+                String token = tokenUtils.create(UUID.randomUUID().toString(), "default", String.valueOf(account.getUserId())).getTokenStr();
                 map.put("sessionToken", token);
                 result.setData(objectMapper.writeValueAsString(map));
             } else {
@@ -96,7 +96,7 @@ public class AccountController {
     @Frequency(name = "changePassword",limit = 1,time = 1)
     public Result changePassword(@RequestParam("UserName") String userName,@RequestParam("Captcha")
                                String captcha,@RequestParam("newPassword")String password) throws NoSuchAlgorithmException {
-        Optional<Account> accountOptional = accountService.getAccount(userName);
+        Optional<Account> accountOptional = accountService.getAccountByUserName(userName);
         if(accountOptional.isPresent()){
             Account account = accountOptional.get();
             Optional<Captcha> captchaOptional = captchaService.validate(userName,captcha);

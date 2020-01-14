@@ -14,7 +14,7 @@ public class ParameterRequestWrapper extends  HttpServletRequestWrapper {
         // 将request交给父类，以便于调用对应方法的时候，将其输出，其实父亲类的实现方式和第一种new的方式类似
         super(request);
         //将参数表，赋予给当前的Map以便于持有request中的参数
-        this.params.putAll(request.getParameterMap());
+        this.params = request.getParameterMap();
     }
 
     //重载一个构造方法
@@ -56,6 +56,7 @@ public class ParameterRequestWrapper extends  HttpServletRequestWrapper {
             } else {
                 params.put(name, new String[]{String.valueOf(value)});
             }
+
         }
     }
 }

@@ -20,6 +20,7 @@ import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -51,16 +52,18 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         boolean going = true;
         if (methodAnnotation != null) {
             boolean userToken = methodAnnotation.userToken();
-            going = handleCheckLogin(request, response,userToken);
+            String[] requestRoles = methodAnnotation.requestRoles();
+            going = handleCheckLogin(request, response,userToken,requestRoles);
         }else  if(classAnnotation != null) {
             boolean userToken = classAnnotation.userToken();
-            going = handleCheckLogin(request, response,userToken);
+            String[] requestRoles = classAnnotation.requestRoles();
+            going = handleCheckLogin(request, response,userToken,requestRoles);
         }
 
         return going;
     }
 
-    private boolean handleCheckLogin(HttpServletRequest request, HttpServletResponse response,boolean userToken) throws IOException, NoSuchAlgorithmException {
+    private boolean handleCheckLogin(HttpServletRequest request, HttpServletResponse response,boolean userToken,String[] reqeustRoles) throws IOException, NoSuchAlgorithmException {
         Token token = null;
         boolean isTimeOut = false;
         if(userToken) {
@@ -78,7 +81,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         response.setContentType("application/json; charset=utf-8");
         PrintWriter out = null;
         try {
-            if (isTimeOut && userToken) {
+            if (isTimeOut) {
                 Result result = new Result(ErrorCode.FAIL_TOKEN_TIMEOUT);
                 result.setDescription(applicationContext.getMessage("fail_token_timeout", null, LocaleContextHolder.getLocale()));
                 String resultStr = gson.toJson(result);
@@ -90,10 +93,10 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
             Optional<Account> optionalAccount;
             if(userToken){
                 userId = token.getPlayload().getSub();
-                optionalAccount = accountService.getAccount(userId);
+                optionalAccount = accountService.getAccountByUserId(userId);
             }else {
                 String userName = request.getParameter("UserName");
-                optionalAccount = accountService.getAccount(userName);
+                optionalAccount = accountService.getAccountByUserName(userName);
                 if(optionalAccount.isPresent()){
                     userId = optionalAccount.get().getUserId();
                 }
@@ -101,6 +104,11 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
             if (optionalAccount.isPresent()) {
                 Account account = optionalAccount.get();
                 Set<String> roles = account.getRoleTypes();
+                if(!checkPermission(reqeustRoles,roles)){
+                    out = response.getWriter();
+                    String resultStr = generateResult(ErrorCode.FAIL_NO_PERMISSION);
+                    out.append(resultStr);
+                }
                 if(roles.contains(AppConstant.ROLE_TYPE_MANAGER)) {
                     Optional<Manager> managerOptional = managerService.getManager(account.getUserId());
                     if(!managerOptional.isPresent()){
@@ -121,8 +129,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
                         out.append(resultStr);
                         return false;
                     }
-                    ParameterRequestWrapper parameterRequestWrapper = new ParameterRequestWrapper(request);
-                    parameterRequestWrapper.addParameter("UserId", userId);
+                    request.setAttribute("UserId", userId);
                     return true;
                 }else if(roles.contains(AppConstant.ROLE_TYPE_TEACHER)){
                     Optional<Teacher> teacherOptional = teacherService.getTeacher(userId);
@@ -138,8 +145,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
                         out.append(resultStr);
                         return false;
                     }
-                    ParameterRequestWrapper parameterRequestWrapper = new ParameterRequestWrapper(request);
-                    parameterRequestWrapper.addParameter("UserId", userId);
+                    request.setAttribute("UserId", userId);
                     return true;
                 }
             } else {
@@ -168,7 +174,20 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
             result.setDescription(applicationContext.getMessage("fail_expire_invalid", null, LocaleContextHolder.getLocale()));
         }else if(code == ErrorCode.FAIL_MANAGER_FORBID){
             result.setDescription(applicationContext.getMessage("fail_manager_forbid", null, LocaleContextHolder.getLocale()));
+        }else if(code == ErrorCode.FAIL_NO_PERMISSION){
+            result.setDescription(applicationContext.getMessage("fail_no_permission", null, LocaleContextHolder.getLocale()));
         }
         return gson.toJson(result);
+    }
+
+    private boolean checkPermission(String[] requestRoles,Set<String> ownRoles){
+        boolean hasPermission = false;
+        for(String requestRole : requestRoles){
+            hasPermission = ownRoles.contains(requestRole);
+            if(hasPermission){
+                break;
+            }
+        }
+        return hasPermission;
     }
 }

@@ -25,22 +25,26 @@ public class AccountService {
     @Autowired
     ManagerMapper managerMapper;
 
-    public Optional<Account> getAccount(String userName) {
+    public Optional<Account> getAccountByUserId(String userId){
+        return  accountMapper.findByUserId(userId);
+    }
+
+
+    public Optional<Account> getAccount(long userId){
+        return accountMapper.findById(userId);
+    }
+
+    public Optional<Account> getAccountByUserName(String userName){
         return accountMapper.findByUserName(userName);
     }
 
 
-    public Optional<Account> getAccount(long userId) {
-        return accountMapper.findById(userId);
-    }
-
-
-    public void activeManagerAccount(String username, long expireDuration) {
-        Optional<Account> accountOptional = accountMapper.findByUserName(username);
-        if (accountOptional.isPresent()) {
+    public void activeManagerAccount(String username,long expireDuration){
+        Optional<Account> accountOptional =  accountMapper.findByUserName(username);
+        if(accountOptional.isPresent()) {
             Account account = accountOptional.get();
             Optional<Manager> managerOptional = managerMapper.findById(account.getUserId());
-            if (managerOptional.isPresent()) {
+            if(managerOptional.isPresent()){
                 Manager manager = managerOptional.get();
                 manager.setExpireTime(Calendar.getInstance().getTimeInMillis() + expireDuration);
             }

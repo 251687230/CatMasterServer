@@ -1,6 +1,7 @@
 package com.zous.catmaster.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,22 +9,27 @@ import java.util.List;
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+    @NotBlank
     private String name;
     private String contactPhone;
     private String contact;
     private String fixedPhone;
+    @NotBlank
     private String areaCode;
+    @NotBlank
     private String detailAddr;
     private String introduce;
     @ElementCollection
     private List<String> imageUrls = new ArrayList<>();
+    @ManyToOne
+    Manager manager;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -89,5 +95,13 @@ public class Store {
 
     public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
+    }
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 }
