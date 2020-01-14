@@ -11,6 +11,11 @@ public class Result {
         this.errorCode = errorCode;
     }
 
+    public Result(int errorCode,String description){
+        this.errorCode = errorCode;
+        this.description = description;
+    }
+
     public Result(int errorCode, String description, String data) {
         this.errorCode = errorCode;
         this.description = description;

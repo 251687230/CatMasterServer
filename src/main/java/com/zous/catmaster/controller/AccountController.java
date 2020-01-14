@@ -67,10 +67,10 @@ public class AccountController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @Frequency(name = "register", limit = 1, time = 1)
     public Result register(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws NoSuchAlgorithmException {
-        int code = accountService.createManagerAccount(userName, SecurityUtils.md5(password));
-        if (code >= 0) {
+        try {
+            accountService.createManagerAccount(userName, SecurityUtils.md5(password));
             return new Result(ErrorCode.SUCCESS);
-        } else {
+        } catch (Exception e) {
             Result result = new Result(ErrorCode.FAIL_ACCOUNT_EXIT);
             result.setDescription(context.getMessage("fail_account_exist", null, LocaleContextHolder.getLocale()));
             return result;
