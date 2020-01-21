@@ -16,7 +16,7 @@ public class Account {
     private String userName;
     private String password;
     private String userId;
-    @ElementCollection(targetClass=String.class)
+    @ElementCollection(targetClass=String.class,fetch = FetchType.EAGER)
     private Set<String> roleTypes = new HashSet<>();
 
     public Account(){}

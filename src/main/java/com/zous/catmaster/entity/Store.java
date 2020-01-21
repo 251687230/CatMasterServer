@@ -20,6 +20,7 @@ public class Store {
     @NotBlank
     private String detailAddr;
     private String introduce;
+    private String storeIcon;
     @ElementCollection
     private List<String> imageUrls = new ArrayList<>();
     @ManyToOne
@@ -103,5 +104,13 @@ public class Store {
 
     public void setManager(Manager manager) {
         this.manager = manager;
+    }
+
+    public String getStoreIcon() {
+        return storeIcon;
+    }
+
+    public void setStoreIcon(String storeIcon) {
+        this.storeIcon = storeIcon;
     }
 }

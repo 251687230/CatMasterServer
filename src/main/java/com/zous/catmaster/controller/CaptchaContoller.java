@@ -97,6 +97,7 @@ public class CaptchaContoller {
             if(Calendar.getInstance().getTimeInMillis() - queryCaptcha.getCreateTime() > 5 * 60 * 1000){
                 return new Result(ErrorCode.FAIL_CAPTCHA_TIMEOUT,context.getMessage("fail_captcha_timeout",null,LocaleContextHolder.getLocale()));
             }else {
+                mCaptchaService.delete(queryCaptcha);
                 return new Result(ErrorCode.SUCCESS);
             }
         }else {

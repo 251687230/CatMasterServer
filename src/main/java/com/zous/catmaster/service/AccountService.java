@@ -61,6 +61,10 @@ public class AccountService {
         account.setUserId(userId);
         Manager manager = new Manager();
         manager.setId(userId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH,3);
+        manager.setExpireTime(calendar.getTimeInMillis()
+        );
         accountMapper.save(account);
         managerMapper.save(manager);
     }

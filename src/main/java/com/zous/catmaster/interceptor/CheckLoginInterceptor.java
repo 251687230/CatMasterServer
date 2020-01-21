@@ -29,7 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 
@@ -125,7 +127,9 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
                     }
                     if (expireTime < Calendar.getInstance().getTimeInMillis()) {
                         out = response.getWriter();
-                        String resultStr = generateResult(ErrorCode.FAIL_EXPIRE_INVALID);
+                        String resultStr = generateResult(ErrorCode.FAIL_EXPIRE_INVALID, new SimpleDateFormat("yyyy年MM月dd日").format(
+                                new Date(expireTime)
+                        ));
                         out.append(resultStr);
                         return false;
                     }
@@ -163,7 +167,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         return false;
     }
 
-    private String generateResult(int code){
+    private String generateResult(int code,String... params){
         Result result = new Result();
         result.setErrorCode(code);
         if(code == ErrorCode.FAIL_ACCOUNT_NOT_EXIST){
@@ -171,7 +175,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         }else if(code == ErrorCode.FAIL_NOT_ACTIVITY){
             result.setDescription(applicationContext.getMessage("fail_not_active", null, LocaleContextHolder.getLocale()));
         }else if(code == ErrorCode.FAIL_EXPIRE_INVALID){
-            result.setDescription(applicationContext.getMessage("fail_expire_invalid", null, LocaleContextHolder.getLocale()));
+            result.setDescription(applicationContext.getMessage("fail_expire_invalid", params, LocaleContextHolder.getLocale()));
         }else if(code == ErrorCode.FAIL_MANAGER_FORBID){
             result.setDescription(applicationContext.getMessage("fail_manager_forbid", null, LocaleContextHolder.getLocale()));
         }else if(code == ErrorCode.FAIL_NO_PERMISSION){
