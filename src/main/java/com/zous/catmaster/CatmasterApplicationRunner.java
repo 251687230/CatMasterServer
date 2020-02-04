@@ -1,5 +1,6 @@
 package com.zous.catmaster;
 
+import com.zous.catmaster.bean.AppConstant;
 import com.zous.catmaster.config.JWTProperties;
 import com.zous.catmaster.utils.TokenUtils;
 import org.springframework.boot.ApplicationArguments;
@@ -9,6 +10,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.io.File;
 import java.util.Locale;
 
 @Component
@@ -26,6 +28,10 @@ public class CatmasterApplicationRunner implements ApplicationRunner {
 
         LocaleContextHolder.setDefaultLocale(Locale.CHINA);
 
+        File imageStorageDir = new File(AppConstant.IMAGE_STORAGE_PATH);
+        if(!imageStorageDir.exists()){
+            imageStorageDir.mkdirs();
+        }
     }
 
     private void initializeApplicationArgument() {

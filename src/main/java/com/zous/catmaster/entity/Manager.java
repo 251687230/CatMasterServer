@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,9 +13,9 @@ import java.util.Set;
 public class Manager extends User{
 
     private long expireTime = -1;
-    @OneToMany(targetEntity=Teacher.class)
+    @OneToMany(targetEntity=Teacher.class,fetch = FetchType.EAGER)
     private Set<Teacher> teachers = new HashSet<>();
-    @OneToMany(targetEntity = Store.class)
+    @OneToMany(targetEntity = Store.class,fetch = FetchType.EAGER)
     private Set<Store> stores = new HashSet<>();
 
     public long getExpireTime() {

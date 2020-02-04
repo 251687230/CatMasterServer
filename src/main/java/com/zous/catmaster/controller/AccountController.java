@@ -93,11 +93,7 @@ public class AccountController {
         TokenUtils tokenUtils = TokenUtils.defaultUtil();
         Token newToken = tokenUtils.parseAndRefresh(token);
         String tokenStr = newToken.getTokenStr();
-        Result result = new Result(ErrorCode.SUCCESS);
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, String> map = new HashMap<>();
-        map.put("sessionToken", tokenStr);
-        result.setData(objectMapper.writeValueAsString(map));
+        Result result = new Result(ErrorCode.SUCCESS,"",tokenStr);
         return result;
     }
 

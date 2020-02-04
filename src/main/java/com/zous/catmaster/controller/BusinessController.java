@@ -2,6 +2,7 @@ package com.zous.catmaster.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.zous.catmaster.annotation.CheckLogin;
 import com.zous.catmaster.annotation.Frequency;
 import com.zous.catmaster.bean.AppConstant;
@@ -33,6 +34,8 @@ public class BusinessController {
     @Autowired
     ApplicationContext context;
 
+    Gson gson = new Gson();
+
     @RequestMapping(value = "/getStores",method = RequestMethod.GET)
     @Frequency(name = "getStores",limit = 1,time = 1)
     @CheckLogin(requestRoles = AppConstant.ROLE_TYPE_MANAGER)
@@ -45,17 +48,27 @@ public class BusinessController {
         return result;
     }
 
+    @RequestMapping(value = "/deleteStore",method = RequestMethod.POST)
+    @CheckLogin(requestRoles = AppConstant.ROLE_TYPE_MANAGER)
+    @Frequency(name = "deleteStore",limit = 1,time = 10)
+    public Result deleteStore(@RequestParam("StoreId") String storeId) throws Exception {
+        //FIXME 关联表的删除关系需要进一步检测
+        storeService.deleteStore(storeId);
+        return new Result(ErrorCode.SUCCESS);
+    }
+
     @RequestMapping(value = "/saveStore",method = RequestMethod.POST,produces =  "application/json;charset=UTF-8")
     @CheckLogin(requestRoles = AppConstant.ROLE_TYPE_MANAGER)
     @Frequency(name = "saveStore",limit = 1,time = 1)
     public Result saveStore(@RequestAttribute("UserId")String userId,@RequestBody Store store) throws JsonProcessingException {
-        Long id = store.getId();
+        String id = store.getId();
         if(id == null){
             Optional<Manager> managerOpt = managerService.getManager(userId);
             if(managerOpt.isPresent()){
                 store.setManager(managerOpt.get());
                 try {
-                    storeService.saveStore(store);
+                    Store returnStore = storeService.saveStore(store);
+                    return new Result(ErrorCode.SUCCESS,"",gson.toJson(returnStore));
                 } catch (Exception e) {
                     Result result = new Result(ErrorCode.FAIL_PARAMS_ERROR);
                     result.setDescription(context.getMessage("fail_params_error",null, LocaleContextHolder.getLocale()));
@@ -74,13 +87,13 @@ public class BusinessController {
                 return result;
             }
             try {
-                storeService.saveStore(store);
+                Store returnStore = storeService.saveStore(store);
+                return new Result(ErrorCode.SUCCESS,"",gson.toJson(returnStore));
             } catch (Exception e) {
                 Result result = new Result(ErrorCode.FAIL_PARAMS_ERROR);
                 result.setDescription(context.getMessage("fail_params_error",null, LocaleContextHolder.getLocale()));
                 return result;
             }
         }
-        return new Result(ErrorCode.SUCCESS);
     }
 }

@@ -17,11 +17,16 @@ public class StoreService {
         return storeMapper.findAllByManagerId(userId);
     }
 
-    public void saveStore(Store store) throws Exception{
-        storeMapper.save(store);
+    public void deleteStore(String id) throws Exception{
+        storeMapper.deleteById(id);
     }
 
-    public Optional<Store> getStore(String userId,long storeId){
+    public Store saveStore(Store store) throws Exception{
+        storeMapper.save(store);
+        return store;
+    }
+
+    public Optional<Store> getStore(String userId,String storeId){
         return storeMapper.findByManagerIdAndId(userId, storeId);
     }
 }

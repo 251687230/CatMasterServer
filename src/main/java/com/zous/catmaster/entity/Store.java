@@ -1,5 +1,8 @@
 package com.zous.catmaster.entity;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -8,8 +11,9 @@ import java.util.List;
 @Entity
 public class Store {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid")
+    private String id;
     @NotBlank
     private String name;
     private String contactPhone;
@@ -21,16 +25,16 @@ public class Store {
     private String detailAddr;
     private String introduce;
     private String storeIcon;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> imageUrls = new ArrayList<>();
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     Manager manager;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

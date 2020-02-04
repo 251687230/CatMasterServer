@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface StoreMapper extends CrudRepository<Store,Long> {
+public interface StoreMapper extends CrudRepository<Store,String> {
     List<Store> findAllByManagerId(String userId);
-    Optional<Store> findByManagerIdAndId(String managerId, long id);
+    Optional<Store> findByManagerIdAndId(String managerId, String id);
 }

@@ -24,7 +24,7 @@ import java.util.UUID;
 public class BaseControllerTest extends AbstractTransactionalJUnit4SpringContextTests {
     protected MockMvc mvc;
     protected static String VERIFE_KEY = "zous.catmaster@2019";
-    protected final String USER_NAME = "lujie";
+    protected final String USER_NAME = "13278820324";
     protected final String PASSWORD = "123456";
     Gson gson = new Gson();
 

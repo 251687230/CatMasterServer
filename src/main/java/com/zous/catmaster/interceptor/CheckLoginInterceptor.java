@@ -17,6 +17,7 @@ import com.zous.catmaster.utils.ParameterRequestWrapper;
 import com.zous.catmaster.utils.SecurityUtils;
 import com.zous.catmaster.utils.TokenUtils;
 import org.apache.catalina.connector.Response;
+import org.apache.http.util.TextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -70,6 +71,10 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         boolean isTimeOut = false;
         if(userToken) {
             String tokenStr = request.getHeader("Token");
+            if (TextUtils.isEmpty(tokenStr)) {
+              response.sendError(Response.SC_FORBIDDEN,applicationContext.getMessage("fail_token_incorret", null, LocaleContextHolder.getLocale()));
+              return false;
+            }
             TokenUtils tokenUtils = TokenUtils.defaultUtil();
             token = tokenUtils.parse(tokenStr);
             boolean isIllegality = tokenUtils.isIllegality(tokenStr);

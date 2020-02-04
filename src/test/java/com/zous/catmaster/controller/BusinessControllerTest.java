@@ -29,10 +29,10 @@ public class BusinessControllerTest extends BaseControllerTest {
     @Before
     public void init() throws NoSuchAlgorithmException, JsonProcessingException {
         //注册及登录
-        accountService.createManagerAccount(USER_NAME, SecurityUtils.md5(PASSWORD));
-        accountService.activeManagerAccount(USER_NAME,7 * 24 * 3600);
+        //accountService.createManagerAccount(USER_NAME, SecurityUtils.md5(PASSWORD));
+        //accountService.activeManagerAccount(USER_NAME,7 * 24 * 3600);
 
-        Result resultObj = accountController.login(USER_NAME,PASSWORD);
+        Result resultObj = accountController.login(USER_NAME,SecurityUtils.md5(PASSWORD));
         token = (String) gson.fromJson(resultObj.getData(), HashMap.class).get("sessionToken");
     }
 
