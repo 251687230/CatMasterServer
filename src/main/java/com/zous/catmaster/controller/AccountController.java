@@ -5,14 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.zous.catmaster.annotation.CheckLogin;
 import com.zous.catmaster.annotation.Frequency;
+import com.zous.catmaster.bean.AppConstant;
 import com.zous.catmaster.bean.ErrorCode;
 import com.zous.catmaster.bean.Result;
 import com.zous.catmaster.bean.Token;
 import com.zous.catmaster.entity.Account;
 import com.zous.catmaster.entity.Captcha;
+import com.zous.catmaster.entity.Customer;
 import com.zous.catmaster.entity.Store;
 import com.zous.catmaster.service.AccountService;
 import com.zous.catmaster.service.CaptchaService;
+import com.zous.catmaster.service.CustomerService;
 import com.zous.catmaster.service.StoreService;
 import com.zous.catmaster.utils.DateUtils;
 import com.zous.catmaster.utils.SecurityUtils;
@@ -36,6 +39,8 @@ public class AccountController {
     @Autowired
     StoreService storeService;
     @Autowired
+    CustomerService customerService;
+    @Autowired
     ApplicationContext context;
     @Value("${spring.profiles.active}")
     String env;
@@ -44,23 +49,38 @@ public class AccountController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @Frequency(name = "login", limit = 1, time = 1)
     @CheckLogin(userToken = false)
-    public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws JsonProcessingException, NoSuchAlgorithmException {
+    public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password,@RequestParam("Role") String role) throws JsonProcessingException, NoSuchAlgorithmException {
         Optional<Account> optionalAccount = accountService.getAccountByUserName(userName);
         Result result;
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
             if (password.equals(account.getPassword())) {
                 //SUCCESS,return sessionToken
-                result = new Result(ErrorCode.SUCCESS);
-                ObjectMapper objectMapper = new ObjectMapper();
-                Map<String, String> map = new HashMap<>();
-                TokenUtils tokenUtils = TokenUtils.defaultUtil();
-                String token = tokenUtils.create(UUID.randomUUID().toString(), "default", String.valueOf(account.getUserId())).getTokenStr();
-                map.put("sessionToken", token);
+                if(role.equals(AppConstant.ROLE_TYPE_MANAGER)) {
+                    result = new Result(ErrorCode.SUCCESS);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Map<String, String> map = new HashMap<>();
+                    TokenUtils tokenUtils = TokenUtils.defaultUtil();
+                    String token = tokenUtils.create(UUID.randomUUID().toString(), "default", String.valueOf(account.getId())).getTokenStr();
+                    map.put("sessionToken", token);
 
-                List<Store> stores = storeService.getStores(account.getUserId());
-                map.put("stores",stores == null?null:gson.toJson(stores));
-                result.setData(objectMapper.writeValueAsString(map));
+                    List<Store> stores = storeService.getStores(account.getId());
+                    map.put("stores", stores == null ? null : gson.toJson(stores));
+                    result.setData(objectMapper.writeValueAsString(map));
+                }else {
+                    Optional<Customer> customerOptional = customerService.getCustomer(account.getId());
+                    if(customerOptional.isPresent()){
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        Map<String, String> map = new HashMap<>();
+                        TokenUtils tokenUtils = TokenUtils.defaultUtil();
+                        String token = tokenUtils.create(UUID.randomUUID().toString(), "default", String.valueOf(account.getId())).getTokenStr();
+                        map.put("sessionToken", token);
+                        result = new Result(ErrorCode.SUCCESS);
+                        result.setData(objectMapper.writeValueAsString(map));
+                    }else {
+                        result = new Result(ErrorCode.FAIL_ACCOUNT_NOT_EXIST);
+                    }
+                }
             } else {
                 result = new Result(ErrorCode.FAIL_PASSWORD_ERROR);
                 result.setDescription(context.getMessage("fail_password_error", null, LocaleContextHolder.getLocale()));

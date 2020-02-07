@@ -25,14 +25,10 @@ public class AccountService {
     @Autowired
     ManagerMapper managerMapper;
 
-    public Optional<Account> getAccountByUserId(String userId){
-        return  accountMapper.findByUserId(userId);
+    public Optional<Account> getAccount(String id){
+        return  accountMapper.findById(id);
     }
 
-
-    public Optional<Account> getAccount(long userId){
-        return accountMapper.findById(userId);
-    }
 
     public Optional<Account> getAccountByUserName(String userName){
         return accountMapper.findByUserName(userName);
@@ -43,7 +39,7 @@ public class AccountService {
         Optional<Account> accountOptional =  accountMapper.findByUserName(username);
         if(accountOptional.isPresent()) {
             Account account = accountOptional.get();
-            Optional<Manager> managerOptional = managerMapper.findById(account.getUserId());
+            Optional<Manager> managerOptional = managerMapper.findById(account.getId());
             if(managerOptional.isPresent()){
                 Manager manager = managerOptional.get();
                 manager.setExpireTime(Calendar.getInstance().getTimeInMillis() + expireDuration);
@@ -55,17 +51,18 @@ public class AccountService {
     public void createManagerAccount(String userName, String password) {
         Set<String> roleTypes = new HashSet<>();
         roleTypes.add(AppConstant.ROLE_TYPE_MANAGER);
+        Calendar calendar = Calendar.getInstance();
         Account account = new Account(userName, password);
         account.setRoleTypes(roleTypes);
-        String userId = UUID.randomUUID().toString();
-        account.setUserId(userId);
+        account.setCreateTime(calendar.getTimeInMillis());
+        accountMapper.save(account);
         Manager manager = new Manager();
-        manager.setId(userId);
-        Calendar calendar = Calendar.getInstance();
+        manager.setId(account.getId());
+
         calendar.add(Calendar.DAY_OF_MONTH,3);
         manager.setExpireTime(calendar.getTimeInMillis()
         );
-        accountMapper.save(account);
+
         managerMapper.save(manager);
     }
 }

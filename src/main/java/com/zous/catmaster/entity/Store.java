@@ -6,7 +6,9 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Store {
@@ -29,6 +31,9 @@ public class Store {
     private List<String> imageUrls = new ArrayList<>();
     @ManyToOne(fetch = FetchType.EAGER)
     Manager manager;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    Set<Card> cards = new HashSet<>();
 
     public String getId() {
         return id;
@@ -116,5 +121,13 @@ public class Store {
 
     public void setStoreIcon(String storeIcon) {
         this.storeIcon = storeIcon;
+    }
+
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
     }
 }

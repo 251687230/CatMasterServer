@@ -21,9 +21,10 @@ public class Course {
     @ElementCollection(targetClass=String.class)
     private List<String> imageUrls = new ArrayList<>();
     private String description;
-    @ManyToOne(targetEntity = Store.class)
-    @JoinColumn(name = "store_id")
-    private Store belongStore;
+
+    @OneToOne
+    Card card;
+
 
     public long getId() {
         return id;
@@ -97,11 +98,12 @@ public class Course {
         this.description = description;
     }
 
-    public Store getBelongStore() {
-        return belongStore;
+    public Card getCard() {
+        return card;
     }
 
-    public void setBelongStore(Store belongStore) {
-        this.belongStore = belongStore;
+    public void setCard(Card card) {
+        this.card = card;
     }
+
 }

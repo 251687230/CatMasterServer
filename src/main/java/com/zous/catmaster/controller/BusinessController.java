@@ -8,6 +8,7 @@ import com.zous.catmaster.annotation.Frequency;
 import com.zous.catmaster.bean.AppConstant;
 import com.zous.catmaster.bean.ErrorCode;
 import com.zous.catmaster.bean.Result;
+import com.zous.catmaster.entity.Customer;
 import com.zous.catmaster.entity.Manager;
 import com.zous.catmaster.entity.Store;
 import com.zous.catmaster.service.AccountService;
@@ -35,6 +36,20 @@ public class BusinessController {
     ApplicationContext context;
 
     Gson gson = new Gson();
+
+    @RequestMapping(value = "/getCustomers",method = RequestMethod.GET)
+    @Frequency(name = "getCustomers",limit = 1,time = 1)
+    @CheckLogin(requestRoles = AppConstant.ROLE_TYPE_MANAGER)
+    public Result getCustomers(@RequestParam("StoreId") String storeId){
+        return new Result(ErrorCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "/editCustomer",method = RequestMethod.POST)
+    @Frequency(name = "saveCustomer",limit = 1,time = 1)
+    @CheckLogin(requestRoles = AppConstant.ROLE_TYPE_MANAGER)
+    public Result saveCustomer(@RequestBody Customer customer){
+        return new Result(ErrorCode.SUCCESS);
+    }
 
     @RequestMapping(value = "/getStores",method = RequestMethod.GET)
     @Frequency(name = "getStores",limit = 1,time = 1)
@@ -80,7 +95,7 @@ public class BusinessController {
                 return result;
             }
         }else {
-            Optional<Store> storeOpt = storeService.getStore(userId,id);
+            Optional<Store> storeOpt = storeService.getStore(id);
             if(!storeOpt.isPresent()){
                 Result result = new Result(ErrorCode.FAIL_STORE_NOT_EXIST);
                 result.setDescription(context.getMessage("fail_store_not_exist",null,LocaleContextHolder.getLocale()));

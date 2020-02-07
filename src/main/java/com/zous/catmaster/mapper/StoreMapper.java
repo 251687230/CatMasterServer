@@ -9,5 +9,4 @@ import java.util.Optional;
 
 public interface StoreMapper extends CrudRepository<Store,String> {
     List<Store> findAllByManagerId(String userId);
-    Optional<Store> findByManagerIdAndId(String managerId, String id);
 }

@@ -1,6 +1,8 @@
 package com.zous.catmaster.entity;
 
 
+import org.hibernate.annotations.GeneratorType;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.ListIndexBase;
 
 import javax.persistence.*;
@@ -11,11 +13,12 @@ import java.util.Set;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "userName")})
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid")
+    private String id;
     private String userName;
     private String password;
-    private String userId;
+    private long createTime;
     @ElementCollection(targetClass=String.class,fetch = FetchType.EAGER)
     private Set<String> roleTypes = new HashSet<>();
 
@@ -26,12 +29,11 @@ public class Account {
         this.password = password;
     }
 
-
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,19 +53,19 @@ public class Account {
         this.password = password;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public Set<String> getRoleTypes() {
         return roleTypes;
     }
 
     public void setRoleTypes(Set<String> roleTypes) {
         this.roleTypes = roleTypes;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 }

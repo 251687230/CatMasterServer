@@ -100,12 +100,12 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
             Optional<Account> optionalAccount;
             if(userToken){
                 userId = token.getPlayload().getSub();
-                optionalAccount = accountService.getAccountByUserId(userId);
+                optionalAccount = accountService.getAccount(userId);
             }else {
                 String userName = request.getParameter("UserName");
                 optionalAccount = accountService.getAccountByUserName(userName);
                 if(optionalAccount.isPresent()){
-                    userId = optionalAccount.get().getUserId();
+                    userId = optionalAccount.get().getId();
                 }
             }
             if (optionalAccount.isPresent()) {
@@ -117,7 +117,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
                     out.append(resultStr);
                 }
                 if(roles.contains(AppConstant.ROLE_TYPE_MANAGER)) {
-                    Optional<Manager> managerOptional = managerService.getManager(account.getUserId());
+                    Optional<Manager> managerOptional = managerService.getManager(account.getId());
                     if(!managerOptional.isPresent()){
                         response.sendError(Response.SC_INTERNAL_SERVER_ERROR);
                         return false;
@@ -135,22 +135,6 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
                         String resultStr = generateResult(ErrorCode.FAIL_EXPIRE_INVALID, new SimpleDateFormat("yyyy年MM月dd日").format(
                                 new Date(expireTime)
                         ));
-                        out.append(resultStr);
-                        return false;
-                    }
-                    request.setAttribute("UserId", userId);
-                    return true;
-                }else if(roles.contains(AppConstant.ROLE_TYPE_TEACHER)){
-                    Optional<Teacher> teacherOptional = teacherService.getTeacher(userId);
-                    if(!teacherOptional.isPresent()){
-                        response.sendError(Response.SC_INTERNAL_SERVER_ERROR);
-                        return false;
-                    }
-                    Teacher teacher = teacherOptional.get();
-                    long expireTime = teacher.getManager().getExpireTime();
-                    if(expireTime < 0 || expireTime < Calendar.getInstance().getTimeInMillis()){
-                        out = response.getWriter();
-                        String resultStr = generateResult(ErrorCode.FAIL_MANAGER_FORBID);
                         out.append(resultStr);
                         return false;
                     }

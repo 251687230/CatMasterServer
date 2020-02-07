@@ -26,7 +26,7 @@ public class StoreService {
         return store;
     }
 
-    public Optional<Store> getStore(String userId,String storeId){
-        return storeMapper.findByManagerIdAndId(userId, storeId);
+    public Optional<Store> getStore(String storeId){
+        return storeMapper.findById(storeId);
     }
 }

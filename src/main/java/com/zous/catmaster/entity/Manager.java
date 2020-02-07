@@ -3,18 +3,19 @@ package com.zous.catmaster.entity;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Manager extends User{
+public class Manager  {
+    @Id
+    private String id;
+    private String name;
+    private String headIcon;
 
     private long expireTime = -1;
-    @OneToMany(targetEntity=Teacher.class,fetch = FetchType.EAGER)
-    private Set<Teacher> teachers = new HashSet<>();
     @OneToMany(targetEntity = Store.class,fetch = FetchType.EAGER)
     private Set<Store> stores = new HashSet<>();
 
@@ -26,19 +27,36 @@ public class Manager extends User{
         this.expireTime = expireTime;
     }
 
-    public Set<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(Set<Teacher> teachers) {
-        this.teachers = teachers;
-    }
-
     public Set<Store> getStores() {
         return stores;
     }
 
     public void setStores(Set<Store> stores) {
         this.stores = stores;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getHeadIcon() {
+        return headIcon;
+    }
+
+    public void setHeadIcon(String headIcon) {
+        this.headIcon = headIcon;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

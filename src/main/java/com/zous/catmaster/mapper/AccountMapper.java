@@ -5,7 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface AccountMapper extends CrudRepository<Account,Long> {
+public interface AccountMapper extends CrudRepository<Account,String> {
     Optional<Account> findByUserName(String userName);
-    Optional<Account> findByUserId(String userId);
 }
