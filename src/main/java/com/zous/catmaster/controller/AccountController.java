@@ -49,14 +49,14 @@ public class AccountController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @Frequency(name = "login", limit = 1, time = 1)
     @CheckLogin(userToken = false)
-    public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password,@RequestParam("Role") String role) throws JsonProcessingException, NoSuchAlgorithmException {
+    public Result login(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password, @RequestParam("Role") String role) throws JsonProcessingException, NoSuchAlgorithmException {
         Optional<Account> optionalAccount = accountService.getAccountByUserName(userName);
         Result result;
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
             if (password.equals(account.getPassword())) {
                 //SUCCESS,return sessionToken
-                if(role.equals(AppConstant.ROLE_TYPE_MANAGER)) {
+                if (role.equals(AppConstant.ROLE_TYPE_MANAGER)) {
                     result = new Result(ErrorCode.SUCCESS);
                     ObjectMapper objectMapper = new ObjectMapper();
                     Map<String, String> map = new HashMap<>();
@@ -67,19 +67,14 @@ public class AccountController {
                     List<Store> stores = storeService.getStores(account.getId());
                     map.put("stores", stores == null ? null : gson.toJson(stores));
                     result.setData(objectMapper.writeValueAsString(map));
-                }else {
-                    Optional<Customer> customerOptional = customerService.getCustomer(account.getId());
-                    if(customerOptional.isPresent()){
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        Map<String, String> map = new HashMap<>();
-                        TokenUtils tokenUtils = TokenUtils.defaultUtil();
-                        String token = tokenUtils.create(UUID.randomUUID().toString(), "default", String.valueOf(account.getId())).getTokenStr();
-                        map.put("sessionToken", token);
-                        result = new Result(ErrorCode.SUCCESS);
-                        result.setData(objectMapper.writeValueAsString(map));
-                    }else {
-                        result = new Result(ErrorCode.FAIL_ACCOUNT_NOT_EXIST);
-                    }
+                } else {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Map<String, String> map = new HashMap<>();
+                    TokenUtils tokenUtils = TokenUtils.defaultUtil();
+                    String token = tokenUtils.create(UUID.randomUUID().toString(), "default", String.valueOf(account.getId())).getTokenStr();
+                    map.put("sessionToken", token);
+                    result = new Result(ErrorCode.SUCCESS);
+                    result.setData(objectMapper.writeValueAsString(map));
                 }
             } else {
                 result = new Result(ErrorCode.FAIL_PASSWORD_ERROR);
@@ -97,7 +92,7 @@ public class AccountController {
     @Frequency(name = "register", limit = 1, time = 1)
     public Result register(@RequestParam(value = "UserName") String userName, @RequestParam("Password") String password) throws NoSuchAlgorithmException {
         try {
-            accountService.createManagerAccount(userName,password);
+            accountService.createManagerAccount(userName, password);
             return new Result(ErrorCode.SUCCESS);
         } catch (Exception e) {
             Result result = new Result(ErrorCode.FAIL_ACCOUNT_EXIT);
@@ -113,21 +108,21 @@ public class AccountController {
         TokenUtils tokenUtils = TokenUtils.defaultUtil();
         Token newToken = tokenUtils.parseAndRefresh(token);
         String tokenStr = newToken.getTokenStr();
-        Result result = new Result(ErrorCode.SUCCESS,"",tokenStr);
+        Result result = new Result(ErrorCode.SUCCESS, "", tokenStr);
         return result;
     }
 
     @RequestMapping(value = "changePassword", method = RequestMethod.POST)
-    @Frequency(name = "changePassword",limit = 1,time = 1)
-    public Result changePassword(@RequestParam("UserName") String userName,@RequestParam("NewPassword")String password) throws NoSuchAlgorithmException {
+    @Frequency(name = "changePassword", limit = 1, time = 1)
+    public Result changePassword(@RequestParam("UserName") String userName, @RequestParam("NewPassword") String password) throws NoSuchAlgorithmException {
         Optional<Account> accountOptional = accountService.getAccountByUserName(userName);
-        if(accountOptional.isPresent()){
+        if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
             account.setPassword(password);
             return new Result(ErrorCode.SUCCESS);
-        }else {
+        } else {
             Result result = new Result(ErrorCode.FAIL_ACCOUNT_NOT_EXIST);
-            result.setDescription(context.getMessage("fail_account_not_exist",null,LocaleContextHolder.getLocale()));
+            result.setDescription(context.getMessage("fail_account_not_exist", null, LocaleContextHolder.getLocale()));
             return result;
         }
     }

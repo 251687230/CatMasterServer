@@ -1,31 +1,32 @@
 package com.zous.catmaster.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 public class Customer  {
     @Id
-    private AccountStoreMapper accountStoreMapper;
-
+    private AccountStoreKey accountStoreKey;
+    @NotBlank
     private String name;
 
     private String headIcon;
+    @NotBlank
+    private String phoneNum;
 
     private long birthday;
 
     private long joinTime;
 
-    private boolean sex;
+    private int sex;
 
     private String remarks;
-    @ManyToMany(targetEntity = Card.class)
+    @ManyToMany(targetEntity = Card.class,fetch = FetchType.EAGER )
     private Set<Card> ownCard = new HashSet<>();
 
+    private int credit;
 
     public String getName() {
         return name;
@@ -51,11 +52,11 @@ public class Customer  {
         this.birthday = birthday;
     }
 
-    public boolean isSex() {
+    public int getSex() {
         return sex;
     }
 
-    public void setSex(boolean sex) {
+    public void setSex(int sex) {
         this.sex = sex;
     }
 
@@ -83,11 +84,27 @@ public class Customer  {
         this.joinTime = joinTime;
     }
 
-    public AccountStoreMapper getAccountStoreMapper() {
-        return accountStoreMapper;
+    public AccountStoreKey getAccountStoreKey() {
+        return accountStoreKey;
     }
 
-    public void setAccountStoreMapper(AccountStoreMapper accountStoreMapper) {
-        this.accountStoreMapper = accountStoreMapper;
+    public void setAccountStoreKey(AccountStoreKey accountStoreKey) {
+        this.accountStoreKey = accountStoreKey;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public int getCredit() {
+        return credit;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
     }
 }

@@ -13,6 +13,7 @@ public class ErrorCode {
     public static int FAIL_ACCOUNT_EXIT = -1006;
     public static int FAIL_MANAGER_FORBID = -1007;
     public static int FAIL_NO_PERMISSION = -1008;
+    public static int FAIL_PHONE_EXIST = -1009;
 
     //Captcha
     public static int FAIL_INVALID_PHONENUM = -1101;

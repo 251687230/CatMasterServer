@@ -6,6 +6,7 @@ import com.zous.catmaster.entity.Manager;
 import com.zous.catmaster.mapper.AccountMapper;
 import com.zous.catmaster.mapper.ManagerMapper;
 import com.zous.catmaster.utils.SecurityUtils;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ public class AccountService {
         return  accountMapper.findById(id);
     }
 
-
     public Optional<Account> getAccountByUserName(String userName){
         return accountMapper.findByUserName(userName);
     }
@@ -45,6 +45,11 @@ public class AccountService {
                 manager.setExpireTime(Calendar.getInstance().getTimeInMillis() + expireDuration);
             }
         }
+    }
+
+    public Account saveAccount(Account account){
+        accountMapper.save(account);
+        return account;
     }
 
     @Transactional

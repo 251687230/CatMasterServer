@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 public class Teacher {
     @Id
-    private AccountStoreMapper accountStoreMapper;
+    private AccountStoreKey accountStoreKey;
     @NotBlank
     private String name;
 
@@ -82,11 +82,11 @@ public class Teacher {
         this.phoneNum = phoneNum;
     }
 
-    public AccountStoreMapper getAccountStoreMapper() {
-        return accountStoreMapper;
+    public AccountStoreKey getAccountStoreKey() {
+        return accountStoreKey;
     }
 
-    public void setAccountStoreMapper(AccountStoreMapper accountStoreMapper) {
-        this.accountStoreMapper = accountStoreMapper;
+    public void setAccountStoreKey(AccountStoreKey accountStoreKey) {
+        this.accountStoreKey = accountStoreKey;
     }
 }

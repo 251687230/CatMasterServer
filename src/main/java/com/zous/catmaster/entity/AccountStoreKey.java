@@ -4,7 +4,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-public class AccountStoreMapper implements Serializable {
+public class AccountStoreKey implements Serializable {
 
     private static final long serialVersionUID = -3772232486544864818L;
 
@@ -12,10 +12,10 @@ public class AccountStoreMapper implements Serializable {
 
     private String storeId;
 
-    public AccountStoreMapper() {
+    public AccountStoreKey() {
     }
 
-    public AccountStoreMapper(String accoutId, String storeId) {
+    public AccountStoreKey(String accoutId, String storeId) {
         this.accoutId = accoutId;
         this.storeId = storeId;
     }
@@ -48,8 +48,8 @@ public class AccountStoreMapper implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
-        if (!(obj instanceof AccountStoreMapper)) return false;
-        AccountStoreMapper objKey = (AccountStoreMapper) obj;
+        if (!(obj instanceof AccountStoreKey)) return false;
+        AccountStoreKey objKey = (AccountStoreKey) obj;
         if (accoutId.equalsIgnoreCase(objKey.getAccoutId())
                 && storeId.equalsIgnoreCase(objKey.getStoreId()) ) {
             return true;
